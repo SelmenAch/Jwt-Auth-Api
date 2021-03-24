@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
 const db = require("../models");
 const User = db.user;
-const Role = db.role;
+const Recruiter = db.recruiter;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
@@ -16,11 +16,12 @@ verifyToken = (req, res, next) => {
       return res.status(401).send({ message: "Unauthorized!" });
     }
     req.userId = decoded.id;
+    req.role = decoded.role;
     next();
   });
 };
 
-isAdmin = (req, res, next) => {
+/*isAdmin = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -49,16 +50,22 @@ isAdmin = (req, res, next) => {
       }
     );
   });
-};
+};*/
 
 isRecruiter = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
+  Recruiter.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
+    if (req.role == "recruiter") {
+      next() ;
+      return ;
+    }
+    res.status(403).send({ message: "Error !! no role provided!" });
+    return;
 
-    Role.find(
+    /*Role.find(
       {
         _id: { $in: user.roles }
       },
@@ -78,7 +85,7 @@ isRecruiter = (req, res, next) => {
         res.status(403).send({ message: "Require Recruiter Role!" });
         return;
       }
-    );
+    );*/
   });
 };
 
@@ -88,8 +95,15 @@ isCandidate = (req, res, next) => {
       res.status(500).send({ message: err });
       return;
     }
+    if (req.role == "candidate"){
+      next();
+      return ;
+    }
+    res.status(403).send({ message: "Error !! no role provided!" });
+    return;
 
-    Role.find(
+
+    /*Role.find(
       {
         _id: { $in: user.roles }
       },
@@ -109,13 +123,13 @@ isCandidate = (req, res, next) => {
         res.status(403).send({ message: "Require Candidate Role!" });
         return;
       }
-    );
+    );*/
   });
 };
 
 const authJwt = {
   verifyToken,
-  isAdmin,
+  //isAdmin,
   isRecruiter,
   isCandidate
 };

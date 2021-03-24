@@ -13,31 +13,32 @@ module.exports = function(app) {
   app.post(
     "/api/auth/candidate_signup",
     [
-      verifySignUp.checkDuplicateUsernameOrEmail,
-      verifySignUp.checkRolesExisted
+      verifySignUp.checkDuplicateUsernameOrEmailInCandidate,
+      //verifySignUp.checkRolesExisted
     ],
     controller.candidate_signup
   );
-  
+  //recuiter
    app.post(
     "/api/auth/recruiter_signup",
     [
-      verifySignUp.checkDuplicateUsernameOrEmail,
-      verifySignUp.checkRolesExisted
+      verifySignUp.checkDuplicateCompanyName
+      //verifySignUp.checkRolesExisted
     ],
     controller.recruiter_signup
   );
   
   //admin
   
-  app.post(
+  /*app.post(
     "/api/auth/admin_signup",
     [
-      verifySignUp.checkDuplicateUsernameOrEmail,
-      verifySignUp.checkRolesExisted
+      verifySignUp.checkDuplicateUsernameOrEmail
+      //verifySignUp.checkRolesExisted
     ],
     controller.admin_signup
-  );
+  );*/
 
-  app.post("/api/auth/signin", controller.signin);
+  app.post("/api/auth/candidate_signin", controller.candidate_signin);
+  app.post("/api/auth/recruiter_signin", controller.recruiter_signin);
 };

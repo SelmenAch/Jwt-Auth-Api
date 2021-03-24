@@ -20,9 +20,9 @@ module.exports = function(app) {
     controller.recruiterBoard
   );
 
-  app.get(
+  /*app.get(
     "/api/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
-  );
+  );*/
 };
