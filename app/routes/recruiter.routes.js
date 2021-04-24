@@ -1,5 +1,5 @@
 const { authJwt } = require("../middlewares");
-const controller = require("../controllers/user.controller");
+const controller = require("../controllers/recruiter.controller");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -10,11 +10,10 @@ module.exports = function(app) {
     next();
   });
   
-  app.post("/api/candidate/change_password", controller.change_password);
+  app.post("/api/recruiter/change_password", controller.change_password);
   
-  app.post("/api/candidate/create_cv", controller.create_cv);
+  app.post("/api/recruiter/edit_profile", controller.edit_profile);
   
-    app.post("/api/candidate/edit_cv", controller.edit_cv);
 
 /*
   app.get("/api/test/all", controller.allAccess);

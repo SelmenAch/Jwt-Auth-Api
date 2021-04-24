@@ -35,22 +35,38 @@ checkDuplicateUsernameOrEmailInCandidate = (req, res, next) => {
   });
 };
 
-checkDuplicateCompanyName = (req, res, next) => {
-  // Username
+checkDuplicateCompanyNameOrEmailInRecruiter = (req, res, next) => {
+  // companyName
   Recruiter.findOne({
-    company: req.body.company
-  }).exec((err, user) => {
+    companyName: req.body.companyName
+  }).exec((err, recruiter) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
 
-    if (user) {
+    if (recruiter) {
       res.status(400).send({ message: "Failed! Company name is already in use!" });
       return;
     }
 
+    
+    // Email
+    Recruiter.findOne({
+      email: req.body.email
+    }).exec((err, recruiter) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (recruiter) {
+        res.status(400).send({ message: "Failed! Email is already in use!" });
+        return;
+      }
+
       next();
+    });
     });
   };
 
@@ -71,7 +87,7 @@ checkDuplicateCompanyName = (req, res, next) => {
 
 const verifySignUp = {
   checkDuplicateUsernameOrEmailInCandidate,
-  checkDuplicateCompanyName
+  checkDuplicateCompanyNameOrEmailInRecruiter
   //checkRolesExisted
 };
 

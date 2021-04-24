@@ -3,14 +3,17 @@ const mongoose = require("mongoose");
 const Recruiter = mongoose.model(
   "Recruiter",
   new mongoose.Schema({
-    company: String,
-    address1: String,
-    address2: String,
+    companyName: String,
+	email: String,
+    address: String,
     city: String,
     province: String,
-    zip: Number,
-    county: String,
-    password: String 
+    country: String,
+    password: String,
+	description: { type: String, default: undefined },
+	website: { type: String, default: undefined },
+	logo: { type: String, default: undefined },
+	registrationDate: { type: Date, default: Date.now() }
   })
 );
 

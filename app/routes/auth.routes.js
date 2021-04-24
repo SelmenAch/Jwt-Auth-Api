@@ -13,7 +13,7 @@ module.exports = function(app) {
   app.post(
     "/api/auth/candidate_signup",
     [
-      verifySignUp.checkDuplicateUsernameOrEmailInCandidate,
+      verifySignUp.checkDuplicateUsernameOrEmailInCandidate
       //verifySignUp.checkRolesExisted
     ],
     controller.candidate_signup
@@ -22,7 +22,7 @@ module.exports = function(app) {
    app.post(
     "/api/auth/recruiter_signup",
     [
-      verifySignUp.checkDuplicateCompanyName
+      verifySignUp.checkDuplicateCompanyNameOrEmailInRecruiter
       //verifySignUp.checkRolesExisted
     ],
     controller.recruiter_signup
