@@ -15,7 +15,12 @@ module.exports = function(app) {
   app.post(
     "/api/auth/candidate_signup",
     [
+<<<<<<< HEAD
       verifySignUp.checkDuplicateUsernameOrEmailInCandidate,
+=======
+      verifySignUp.checkDuplicateUsernameOrEmailInCandidate
+      //verifySignUp.checkRolesExisted
+>>>>>>> 91de66b60412943f08fdcda23bfd4dcfe3b2d363
     ],
     controller.candidate_signup
   );
@@ -25,7 +30,12 @@ module.exports = function(app) {
   app.post(
     "/api/auth/recruiter_signup",
     [
+<<<<<<< HEAD
       verifySignUp.checkDuplicateCompanyName
+=======
+      verifySignUp.checkDuplicateCompanyNameOrEmailInRecruiter
+      //verifySignUp.checkRolesExisted
+>>>>>>> 91de66b60412943f08fdcda23bfd4dcfe3b2d363
     ],
     controller.recruiter_signup
   );
