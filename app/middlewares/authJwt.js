@@ -21,36 +21,20 @@ verifyToken = (req, res, next) => {
   });
 };
 
-/*isAdmin = (req, res, next) => {
+isAdmin = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
-
-    Role.find(
-      {
-        _id: { $in: user.roles }
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "admin") {
-            next();
-            return;
-          }
-        }
-
-        res.status(403).send({ message: "Require Admin Role!" });
-        return;
-      }
-    );
+    
+    if (req.role == "admin") {
+      next();
+      return;
+    }
+    res.status(404).send({message: "Error !! You Are Unauthorized "})
   });
-};*/
+};
 
 isRecruiter = (req, res, next) => {
   Recruiter.findById(req.userId).exec((err, user) => {
@@ -62,30 +46,8 @@ isRecruiter = (req, res, next) => {
       next() ;
       return ;
     }
-    res.status(403).send({ message: "Error !! no role provided!" });
+    res.status(403).send({ message: "Error !! You Are Unauthorized " });
     return;
-
-    /*Role.find(
-      {
-        _id: { $in: user.roles }
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "recruiter") {
-            next();
-            return;
-          }
-        }
-
-        res.status(403).send({ message: "Require Recruiter Role!" });
-        return;
-      }
-    );*/
   });
 };
 
@@ -99,37 +61,14 @@ isCandidate = (req, res, next) => {
       next();
       return ;
     }
-    res.status(403).send({ message: "Error !! no role provided!" });
+    res.status(403).send({ message: "Error !! You Are Unauthorized " });
     return;
-
-
-    /*Role.find(
-      {
-        _id: { $in: user.roles }
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "candidate") {
-            next();
-            return;
-          }
-        }
-
-        res.status(403).send({ message: "Require Candidate Role!" });
-        return;
-      }
-    );*/
   });
 };
 
 const authJwt = {
   verifyToken,
-  //isAdmin,
+  isAdmin,
   isRecruiter,
   isCandidate
 };
