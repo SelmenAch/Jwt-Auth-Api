@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-const db = require("../models/index");
-=======
 /*
 
->>>>>>> 91de66b60412943f08fdcda23bfd4dcfe3b2d363
 exports.allAccess = (req, res) => {
   res.status(200).send("Public Content.");
 };
@@ -27,9 +23,8 @@ exports.recruiterBoard = (req, res) => {
 const config = require("../config/auth.config");
 const db = require("../models/index");
 const User = db.user;
-
+const Application = db.application ;
 const _ = require('lodash');
-
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
@@ -204,4 +199,22 @@ exports.edit_cv = (req, res) => {
 
     });
 };
->>>>>>> 91de66b60412943f08fdcda23bfd4dcfe3b2d363
+
+// Submit test function
+
+exports.submit_application = (req,res) => {
+		const application = new Application({
+		  condidat: req.body._id,
+		  offer: req.body._offer ,
+		  test: req.body._testCreated,
+		  responses: req.body.responses
+		});
+	  
+		application.save((err) => {
+		  if (err) {
+			res.status(500).send({ message: err });
+			return;
+		  }
+		  res.send({ message: "Your application was registered successfully! Good Luck " });
+		});
+};

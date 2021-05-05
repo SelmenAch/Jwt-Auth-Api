@@ -1,7 +1,7 @@
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
-
 module.exports = function(app) {
+
   app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -10,45 +10,35 @@ module.exports = function(app) {
     next();
   });
 
-  // Condidate
-  app.post("/api/auth/candidate_signin", controller.candidate_signin);
+  //SIGNUP
   app.post(
     "/api/auth/candidate_signup",
-    [
-<<<<<<< HEAD
-      verifySignUp.checkDuplicateUsernameOrEmailInCandidate,
-=======
-      verifySignUp.checkDuplicateUsernameOrEmailInCandidate
-      //verifySignUp.checkRolesExisted
->>>>>>> 91de66b60412943f08fdcda23bfd4dcfe3b2d363
-    ],
+    verifySignUp.checkDuplicateUsernameOrEmailInCandidate,
     controller.candidate_signup
   );
-
-  //Recuiter
-  app.post("/api/auth/recruiter_signin", controller.recruiter_signin);
-  app.post(
+   app.post(
     "/api/auth/recruiter_signup",
-    [
-<<<<<<< HEAD
-      verifySignUp.checkDuplicateCompanyName
-=======
-      verifySignUp.checkDuplicateCompanyNameOrEmailInRecruiter
-      //verifySignUp.checkRolesExisted
->>>>>>> 91de66b60412943f08fdcda23bfd4dcfe3b2d363
-    ],
+    verifySignUp.checkDuplicateCompanyNameOrEmailInRecruiter,
     controller.recruiter_signup
   );
+  app.post("/api/auth/admin_signup",controller.admin_signup);
+
+  //SIGNIN
+  app.post("/api/auth/candidate_signin", controller.candidate_signin);
+  app.post("/api/auth/recruiter_signin", controller.recruiter_signin);
+  app.post("/api/auth/admin_signin",controller.admin_signin);
   
   //admin
-  app.post(
-    "/api/auth/admin_signin",
-    controller.admin_signin
-  );
-  app.post("/api/auth/admin_signup",
-  controller.admin_signup
-  )
-
-
   
+  /*app.post(
+    "/api/auth/admin_signup",
+    [
+      verifySignUp.checkDuplicateUsernameOrEmail
+      //verifySignUp.checkRolesExisted
+    ],
+    controller.admin_signup
+  );*/
+
+
+
 };

@@ -4,7 +4,7 @@ const Offer = mongoose.model(
   "Offer",
     new mongoose.Schema({
     title: String,
-	company: { type: Schema.Types.ObjectId, ref: 'Recruiter' },
+	company: { type: mongoose.Schema.Types.ObjectId, ref: 'Recruiter' },
 	type: String, //summer internship / end of studies internship
 	category: { type: String, enum : ['Information Technology','Finance & Banking','Sales & Marketing','Healthcare & Fitness','Art & Design'] },
     location: String,	
@@ -13,6 +13,7 @@ const Offer = mongoose.model(
 	endDate: Date,
 	keywords: [String],
     description: String,
+	test: {type:mongoose.Schema.Types.ObjectId, ref:"TestModel" } ,
 	isApproved: { type: Boolean, default: false }
   })
 );

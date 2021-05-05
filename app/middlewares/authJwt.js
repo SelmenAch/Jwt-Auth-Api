@@ -3,6 +3,7 @@ const config = require("../config/auth.config.js");
 const db = require("../models");
 const User = db.user;
 const Recruiter = db.recruiter;
+const Admin = db.admin ;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
@@ -22,19 +23,21 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
+  Admin.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
-    
-    if (req.role == "admin") {
-      next();
-      return;
+    console.log(req.role);
+    if (req.role == "admin"){
+        next();
+        return;
     }
-    res.status(404).send({message: "Error !! You Are Unauthorized "})
+    res.status(403).send({ message: "Require Admin Role!" });
+    return;
+    
   });
-};
+}
 
 isRecruiter = (req, res, next) => {
   Recruiter.findById(req.userId).exec((err, user) => {
@@ -46,7 +49,7 @@ isRecruiter = (req, res, next) => {
       next() ;
       return ;
     }
-    res.status(403).send({ message: "Error !! You Are Unauthorized " });
+    res.status(403).send({ message: "Error !! no role provided!" });
     return;
   });
 };
@@ -61,7 +64,7 @@ isCandidate = (req, res, next) => {
       next();
       return ;
     }
-    res.status(403).send({ message: "Error !! You Are Unauthorized " });
+    res.status(403).send({ message: "Error !! no role provided!" });
     return;
   });
 };

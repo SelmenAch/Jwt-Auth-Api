@@ -3,10 +3,11 @@ const mongoose = require("mongoose");
 const Application = mongoose.model(
   "Application",
     new mongoose.Schema({
-	candidat: { type: Schema.Types.ObjectId, ref: 'Candidat' },
-	offer: { type: Schema.Types.ObjectId, ref: 'Offer' },
-	test: { type: Schema.Types.ObjectId, ref: 'Test' },
+	candidat: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+	offer: { type: mongoose.Schema.Types.ObjectId, ref: 'Offer' },
+	test: { type: mongoose.Schema.Types.ObjectId, ref: 'TestCreated' },
 	applyDate: { type: Date, default: Date.now() },
+	responses: [String],
 	status: { type: String, enum : ['Rejected','Pending','Approved'], default: 'Pending' }
   })
 );

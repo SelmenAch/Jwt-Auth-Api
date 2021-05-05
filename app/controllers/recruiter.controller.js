@@ -21,7 +21,7 @@ exports.recruiterBoard = (req, res) => {
 const config = require("../config/auth.config");
 const db = require("../models/index");
 const Recruiter = db.recruiter;
-
+const Offer = db.offer ;
 const _ = require('lodash');
 
 var jwt = require("jsonwebtoken");
@@ -184,4 +184,27 @@ exports.edit_profile = (req, res) => {
 	  });
 
     });
+};
+
+exports.CreateOffer = (req,res)=>{
+
+	const offer = new Offer({
+		title: req.body.title,
+		company: req.body._id,
+		type: req.body.type, 
+		category: req.body.category,
+		location: req.body.location,	
+		startDate: req.body.startDate,
+		endDate: req.body.endDate,
+		keywords: req.body.keywords,
+		description: req.body.description,
+	})
+	offer.save((err,offer)=>{
+		if (err){
+			req.status(400).send("Offer could not be created");
+			return;
+		} else {
+			req.status(200).send("Offer Created Successfully");
+		}
+	})
 };

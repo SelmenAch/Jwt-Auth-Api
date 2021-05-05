@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
-const Test = mongoose.model(
-<<<<<<< HEAD
-    "Test",
+const TestModal = mongoose.model(
+    "TestModal",
     new mongoose.Schema({
         type: String,
         questions: [] ,
@@ -10,25 +9,19 @@ const Test = mongoose.model(
     })
   );
   
-  module.exports = Test;
-=======
-  "Test",
-    new mongoose.Schema({
-	candidat: { type: Schema.Types.ObjectId, ref: 'Candidat' },
-	offer: { type: Schema.Types.ObjectId, ref: 'Offer' },
-	questions: [
-		{
-			title: String,
-			options: [String],
-			correctOption : String,
-			answer: String
-		}
-	],
-	createdDate: { type: Date, default: Date.now() },
-	score: Number,
-	isPassed: { type: Boolean, default: false }
-  })
-);
+exports.TestModal = TestModal;
 
-module.exports = Test;
->>>>>>> 91de66b60412943f08fdcda23bfd4dcfe3b2d363
+//**************************************
+
+const TestCreated = mongoose.model(
+	"TestCreated",
+	new mongoose.Schema({
+		createdDate: { type: Date, default: Date.now() },
+		questions: [],
+		options: []
+	})
+)
+
+exports.TestCreated = TestCreated ;
+
+
