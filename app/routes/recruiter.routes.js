@@ -14,7 +14,8 @@ module.exports = function(app) {
   
   app.post("/api/recruiter/edit_profile", controller.edit_profile);
   
-  app.post("/api/offer/create", [authJwt.verifyToken, authJwt.isRecruiter] , controller.createOffer ); // mizelet
-  app.get("/api/application/get/:id",[authJwt.verifyToken, authJwt.isRecruiter],controller.getApplications) ; //mizelet
+  app.post("/api/offer/create", /*[authJwt.verifyToken, authJwt.isRecruiter] ,*/ controller.createOffer ); // mizelet
+  app.get("/api/offers/:id/getKeywords" , controller.getKeywords);
+  //app.get("/api/application/get/:id",[authJwt.verifyToken, authJwt.isRecruiter],controller.getApplications) ; //mizelet
 
 };

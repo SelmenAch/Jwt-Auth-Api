@@ -7,7 +7,7 @@ const Application = mongoose.model(
 	offer: { type: mongoose.Schema.Types.ObjectId, ref: 'Offer' },
 	test: { type: mongoose.Schema.Types.ObjectId, ref: 'TestCreated' },
 	applyDate: { type: Date, default: Date.now() },
-	responses: [String],
+	score: Number,
 	status: { type: String, enum : ['Rejected','Pending','Approved'], default: 'Pending' }
   })
 );

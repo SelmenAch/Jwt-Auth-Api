@@ -1,4 +1,4 @@
-const { createTest,updateTests } = require("../controllers/test.controller");
+const { createTest,generateTests } = require("../controllers/test.controller");
 const authJwt = require("../middlewares/authJwt");
 
 
@@ -12,9 +12,9 @@ app.use(function(req, res, next) {
     next();
   });
 
-app.get("/api/admin/test/:type", [authJwt.verifyToken, authJwt.isAdmin] , createTest);
-app.post("/api/admin/test/updateTests" , [authJwt.verifyToken, authJwt.isAdmin] ,updateTests);
-app.post("/api/admin/offers/accept",[authJwt.verifyToken, authJwt.isAdmin],acceptOffer); //mizelet
-app.post("/api/admin/offers/decline",[authJwt.verifyToken, authJwt.isAdmin],declineOffer); //mizelet
+app.get("/api/admin/test/:type", createTest);
+app.post("/api/admin/generateTests"  ,generateTests);
+//app.post("/api/admin/offers/accept",[authJwt.verifyToken, authJwt.isAdmin],acceptOffer); //mizelet
+//app.post("/api/admin/offers/decline",[authJwt.verifyToken, authJwt.isAdmin],declineOffer); //mizelet
 
 }

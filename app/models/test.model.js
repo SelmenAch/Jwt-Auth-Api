@@ -5,7 +5,8 @@ const TestModal = mongoose.model(
     new mongoose.Schema({
         type: String,
         questions: [] ,
-        options: [] 
+        options: [] ,
+        greens: []
     })
   );
   
@@ -18,7 +19,8 @@ const TestCreated = mongoose.model(
 	new mongoose.Schema({
 		createdDate: { type: Date, default: Date.now() },
 		questions: [],
-		options: []
+		options: [] ,
+    greens: []
 	})
 )
 

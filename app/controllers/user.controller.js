@@ -207,7 +207,7 @@ exports.submit_application = (req,res) => {
 		  condidat: req.body._id,
 		  offer: req.body._offer ,
 		  test: req.body._testCreated,
-		  responses: req.body.responses
+		  score: req.body.score
 		});
 	  
 		application.save((err) => {
@@ -218,3 +218,4 @@ exports.submit_application = (req,res) => {
 		  res.send({ message: "Your application was registered successfully! Good Luck " });
 		});
 };
+

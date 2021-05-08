@@ -13,7 +13,7 @@ const Offer = mongoose.model(
 	endDate: Date,
 	keywords: [String],
     description: String,
-	test: {type:mongoose.Schema.Types.ObjectId, ref:"TestModel" } ,
+	test: {type:mongoose.Schema.Types.ObjectId, ref:"TestCreated" } ,
 	isApproved: { type: Boolean, default: false }
   })
 );

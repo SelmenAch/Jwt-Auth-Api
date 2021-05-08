@@ -1,109 +1,168 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const db = require("../models/index");
+const jsdom = require("jsdom");
 const {TestModal,TestCreated} = db.test ;
 
 dict = {
-4021 : "html",
-4022 : "html",
-4023 : "css",
-4028 : "mysql",
-4029 : "mongodb",
-4031 : "git",
-4032 : "reactNative",
-4027 : "php",
-4057 : "c-sharp",
-4058 : "c-sharp",
-4037 : "java",
-4024 : "java",
-4088 : "angular",
-4089 : "angular",
-4114 : "python",
-
+7040905 : "python",
+7040708 : "angularJs",
+7040920: "angular",
+7040869 : "laravel",
+7040908 : "php",
+7040741 : "java",
+7040831 : "nodejs",
+7040714 : "sql",
+7040824 : "html",
+7040746 : "css",
+7040720 : "reactjs",
+7040867 : "reactnative",
+7040879 : "flutter",
+7040675 : "c-sharp",
+7040689 : "c++",
+7040694 : "c",
+7040705 : "go",
+7040700 : "git",
+7040735 : "kotlin",
+7040750 : "asp.net",
+7040758 : "shell scripting",
+7040769 : "docker",
+7040797 : "kuberneties",
+7040916 : "joomla",
+7040803 : "cloud computing",
+7040820 : "devops",
+7040827 : "restApi",
+7040839 : "xml",
+7040849 : "mean",
+7040859 : "ionic",
+7040873 : "dart",
+7040885: "android",
+7040823: "wordpress"
 }
 
 
-exports.updateTests =  (req,res) => {
-for (const obj in dict) {
-    const url = 'https://www.vskills.in/practice/index.php?route=free/test/getTest&topic_id=' + obj;//This is simple Angular Test
+exports.generateTests =  (req,res) => {
+    for (let obj in dict){
+    const url = 'https://www.vskills.in/practice/index.php?route=quiz%2Fquiz%2FanswerSheet&quiz_id=' + obj;//This is simple Angular Test
+    const questions = [];
+    let allQuestions = [];
+    const options = [];
+    let allOptions = [];
+    let allGreens = [];
     axios(url)
     .then(response => {
         const html = response.data;
         const $ = cheerio.load(html);
-        let questions = $('.question').text();
-        modified_question = [];
-        modified_options = [];
-        let options = $('.options').text();
-        let title = $(".pull-right").text() ;
-        questions.split('\n').map(question => {
-            if (question){
-                question = question.replace(/\s+/g, ' ').trim();
-                modified_question.push(question);
-            }
-        });
-        options.split('\n').map(option => {
-            option = option.replace(/\s+/g, ' ').trim();
-            modified_options.push(option);
-        });
-        options = [];
-        modified_options.map(option => {
-            if (option !== ''){
-                options.push(option)
-            }
+        $(".list-unstyled").each(function(i,ele) {
+            $('p>strong').each(function(){
+                questions.push($(this).text().trim());
+            });
         })
-        options1 = [];
-        let j = 0 ;
-        for (let i = 0 ; i<options.length ; j++) {
-           options1.push(options.splice(i,4));
-        }
-        questions = [];
-        modified_question.map(question => {
-            if (question !== '') 
-                questions.push(question);
+        /*for (let i=0 ; i< questions[0].length ; i++) {
+            if ( i%2 == 0) allQuestions.push(questions[0][i].trim());
+            else allOptions.push(questions[0][i].split('\n')
+                                                .map(option => option.trim())
+                                                .filter(option => option != ''));
+        }*/
+        allQuestions = questions.filter(q => q != '' && q!= 'Given:' && q!='What is the result?');
+        // console.log(allOptions.length);
+        $('.options').each(function(){
+            options.push($(this).text());
         })
-
-        const testModal = new TestModal({
-            type: dict[obj],
-            questions: questions,
-            options: options1
+        options.map(option =>{
+            const opt = option.split('\n').map(o => o.trim()).filter(o => o !== '')
+            allOptions.push(opt);
         })
-
+        $('.green').each(function() {
+            allGreens.push($(this).text().trim());
+        })
+        
+       const testModal = new TestModal({
+            type : dict[obj],
+            questions: allQuestions,
+            options: allOptions,
+            greens: allGreens
+        })
         testModal.save((err,test)=>{
-            if (!err){
-                console.log(" Test Registered Successfully ");
-            }
-            else {
-                res.status(500).send(" Update failed ");
+            if (err) {
+                res.status(500).send("Erreur while saving the test");
+            } else {
+                console.log("Test registered successfully !!")
             }
         })
-
     })
-    .catch(console.error);
+
 }
 }
+
 exports.createTest = (req,res) => {
-    questions = [];
-    options = [];
+    const questions = [];
+    const options = [];
+    const greens = [] ;
+
+    const genQuestions = [] ;
+    const genOptions = [] ;
+    const genGreens = [] ;
+
+
     const types = req.params.type.split(',') ;
+    console.log(types);
         TestModal.find({type : {$in:types} })
                 .exec((err,tests)=>{
                     if (err) {
                         res.status.send(err);
                     }
                     tests.map(test => {
-                    questions.push(test.questions) ;
-                    options.push(test.options);
-                    })
+                        test.questions.map(question =>{
+                            questions.push(question);
+                        }) ;
+                        test.options.map(option =>{
+                            options.push(option);
+                        }) ;
+                        test.greens.map(green =>{
+                            greens.push(green);
+                        }) ;
+                    }) ;
+                    for (let j=0 ; j < greens.length ; j++) {
+                        if (questions[j] == '') {
+                            questions.splice(j,1) ;
+                            greens.splice(j,1);
+                            options.splice(j,1);
+                        }
+                    }
+                    let randomIndexes = getRandomIndexes(greens.length , 30);
+                    console.log(randomIndexes);
+                    for (let i = 0 ; i< randomIndexes.length ; i++) {
+                        genQuestions.push(questions[randomIndexes[i]]);
+                        genOptions.push(options[randomIndexes[i]]);
+                        genGreens.push(greens[randomIndexes[i]]);
+                    } 
+                   
+                    
                     const testCreated = new TestCreated({
-                        questions: questions,
-                        options: options
+                        questions: genQuestions,
+                        options: genOptions,
+                        greens: genGreens
                     })
                     testCreated.save((err,test)=>{
                         if (err) {
                             res.status(500).send(err);
                             return;
                         }
-                        res.status(200).send([questions,options]);
+                        res.status(200).send([genQuestions,genOptions,genGreens , [testCreated._id]]);
                     })
                 })
+}
+
+function getRandomIndexes(taille , nombre) {
+    let indexes = []; 
+    while (indexes.length < nombre ){
+        let i = Math.floor(Math.random() * taille) ;
+        test = false ;
+        for (let j=0 ; j < indexes.length ; j++) {
+            if (indexes[j] === i) test = true ;
+        }
+        if (!test) indexes.push(i);
+    }
+    return indexes ;
 }

@@ -186,7 +186,7 @@ exports.edit_profile = (req, res) => {
     });
 };
 
-exports.CreateOffer = (req,res)=>{
+exports.createOffer = (req,res)=>{
 
 	const offer = new Offer({
 		title: req.body.title,
@@ -200,11 +200,22 @@ exports.CreateOffer = (req,res)=>{
 		description: req.body.description,
 	})
 	offer.save((err,offer)=>{
-		if (err){
-			req.status(400).send("Offer could not be created");
+		if (err){ 
+			res.status(400).send("Offer could not be created");
 			return;
 		} else {
-			req.status(200).send("Offer Created Successfully");
+			res.status(200).send("Offer Created Successfully");
 		}
 	})
 };
+
+exports.getKeywords = (req,res) => {
+	const id = req.params.id ;
+	Offer.findOne({_id: id},(err,offer) =>{
+		if (err) {
+			res.status(500).send("Offer not found xD") ;
+		} else {
+			res.status(200).send(offer.keywords);
+		}
+	})
+}
