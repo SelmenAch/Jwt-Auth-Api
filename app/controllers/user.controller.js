@@ -21,6 +21,7 @@ exports.recruiterBoard = (req, res) => {
 const config = require("../config/auth.config");
 const db = require("../models/index");
 const User = db.user;
+const Application = db.application;
 
 const _ = require('lodash');
 
@@ -196,5 +197,35 @@ exports.edit_cv = (req, res) => {
 		  
 	  });
 
+    });
+};
+
+
+exports.get_applications = (req, res) => {
+	
+  Application.find({
+    'candidate._id': req.body._id
+  }).populate({
+            path: 'offer',
+            model: 'Offer',
+            populate: [{
+                path: 'company',
+                model: 'Recruiter',
+				select: { 'password': 0 }
+            },
+			{
+                path: 'candidate',
+                model: 'User',
+				select: { 'password': 0 }
+            }]
+		})
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "An error occurred while retrieving applications."
+      });
     });
 };

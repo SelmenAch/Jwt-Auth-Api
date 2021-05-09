@@ -28,17 +28,12 @@ module.exports = function(app) {
     controller.recruiter_signup
   );
   
-  //admin
-  
-  /*app.post(
-    "/api/auth/admin_signup",
-    [
-      verifySignUp.checkDuplicateUsernameOrEmail
-      //verifySignUp.checkRolesExisted
-    ],
-    controller.admin_signup
-  );*/
+  //admin 
+  app.post(
+    "/api/auth/admin_signup", controller.admin_signup);
 
   app.post("/api/auth/candidate_signin", controller.candidate_signin);
   app.post("/api/auth/recruiter_signin", controller.recruiter_signin);
+  app.post("/api/auth/admin_signin", controller.admin_signin);
+
 };

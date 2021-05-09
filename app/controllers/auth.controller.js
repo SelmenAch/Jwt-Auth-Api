@@ -2,6 +2,8 @@ const config = require("../config/auth.config");
 const db = require("../models/index");
 const User = db.user;
 const Recruiter = db.recruiter;
+const Admin = db.admin;
+
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -22,22 +24,6 @@ exports.candidate_signup = (req, res) => {
       return;
     }
     res.send({ message: "Candidate was registered successfully!" });
-	  /*Role.findOne({ name: "candidate" }, (err, role) => {
-		if (err) {
-		  res.status(500).send({ message: err });
-		  return;
-		}
-
-		// user.roles = [role._id];
-		user.save(err => {
-		  if (err) {
-			res.status(500).send({ message: err });
-			return;
-		  }
-		  res.send({ message: "Candidate was registered successfully!" });
-		});
-	  });
-    */
   });
 };
 
@@ -58,63 +44,28 @@ exports.recruiter_signup = (req, res) => {
       return;
     }
     res.send({ message: "Recruiter was registered successfully!" });
-    /*
-
-	  Role.findOne({ name: "recruiter" }, (err, role) => {
-		if (err) {
-		  res.status(500).send({ message: err });
-		  return;
-		}
-
-		user.roles = [role._id];
-		user.save(err => {
-		  if (err) {
-			res.status(500).send({ message: err });
-			return;
-		  }
-
-		  res.send({ message: "Recruiter was registered successfully!" });
-		});
-	  });
-    */
+   
   });
 };
 
 //Admin registration
 
-/*exports.admin_signup = (req, res) => {
-  const user = new User({
+exports.admin_signup = (req, res) => {
+  const admin = new Admin({
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8)
   });
 
-  user.save((err, user) => {
+  admin.save((err, admin) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
     res.send({ message: "Admin was registered successfully!" });
-/*
-	Role.findOne({ name: "admin" }, (err, role) => {
-		if (err) {
-		  res.status(500).send({ message: err });
-		  return;
-		}
-
-		user.roles = [role._id];
-		user.save(err => {
-		  if (err) {
-			res.status(500).send({ message: err });
-			return;
-		  }
-
-		  res.send({ message: "Admin was registered successfully!" });
-		});
-	  });
     
   });
-};*/
+};
 
 exports.candidate_signin = (req, res) => {
   User.findOne({
@@ -223,6 +174,47 @@ exports.recruiter_signin = (req,res) => {
 		country: recruiter.country,
 		registrationDate: recruiter.registrationDate,
         role: "recruiter",
+        accessToken: token
+      });
+    });
+
+};
+
+exports.admin_signin = (req,res) => {
+  Admin.findOne({
+	email: req.body.email
+  })
+    .exec((err, admin) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!admin) {
+        return res.status(404).send({ message: "Admin Not found." });
+      }
+
+      var passwordIsValid = bcrypt.compareSync(
+        req.body.password,
+        admin.password
+      );
+
+      if (!passwordIsValid) {
+        return res.status(401).send({
+          accessToken: null,
+          message: "Invalid Password!"
+        });
+      }
+
+      var token = jwt.sign({ id: admin.id, role: "admin" }, config.secret, {
+        expiresIn: 86400 // 24 hours
+      });
+	  
+      res.status(200).send({
+		id: admin._id,
+		username: admin.username,
+		email: admin.email,
+        role: "admin",
         accessToken: token
       });
     });

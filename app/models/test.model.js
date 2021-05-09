@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const Test = mongoose.model(
   "Test",
     new mongoose.Schema({
-	candidat: { type: Schema.Types.ObjectId, ref: 'Candidat' },
-	offer: { type: Schema.Types.ObjectId, ref: 'Offer' },
+	candidat: { type: mongoose.Schema.Types.ObjectId, ref: 'Candidat' },
+	offer: { type: mongoose.Schema.Types.ObjectId, ref: 'Offer' },
 	questions: [
 		{
 			title: String,
