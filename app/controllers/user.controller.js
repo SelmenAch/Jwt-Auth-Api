@@ -229,3 +229,18 @@ exports.get_applications = (req, res) => {
       });
     });
 };
+
+
+exports.get_profile = (req, res) => {
+	
+  User.findOne( { '_id': req.body._id }, { password: 0 } )
+	.then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "An error occurred while retrieving profile."
+      });
+    });
+};
