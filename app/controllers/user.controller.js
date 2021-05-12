@@ -16,7 +16,6 @@ exports.recruiterBoard = (req, res) => {
   res.status(200).send("Recruiter Content.");
 };
 
-<<<<<<< HEAD
 =======
 */
 
@@ -200,11 +199,56 @@ exports.edit_cv = (req, res) => {
     });
 };
 
+exports.get_applications = (req, res) => {
+	
+	Application.find({
+	  'candidat': req.body._id
+	}).exec((err,applications)=>{
+		if (err) res.status(500).send("Error while parsing applications");
+		res.status(200).send(applications);
+	})/*populate({
+			  path: 'offer',
+			  model: 'Offer',
+			  populate: [{
+				  path: 'company',
+				  model: 'Recruiter',
+				  select: { 'password': 0 }
+			  },
+			  {
+				  path: 'candidate',
+				  model: 'User',
+				  select: { 'password': 0 }
+			  }]
+		  })
+	  .then(data => {
+		res.send(data);
+	  })
+	  .catch(err => {
+		res.status(500).send({
+		  message:
+			err.message || "An error occurred while retrieving applications."
+		});
+	  });*/
+  };
+
+exports.get_profile = (req, res) => {
+	
+	User.findOne( { '_id': req.body._id }, { password: 0 } )
+	  .then(data => {
+		res.send(data);
+	  })
+	  .catch(err => {
+		res.status(500).send({
+		  message:
+			err.message || "An error occurred while retrieving profile."
+		});
+	  });
+  };
 // Submit test function
 
 exports.submit_application = (req,res) => {
 		const application = new Application({
-		  condidat: req.body._id,
+		  candidat: req.body._candidat,
 		  offer: req.body._offer ,
 		  test: req.body._testCreated,
 		  score: req.body.score
@@ -218,4 +262,5 @@ exports.submit_application = (req,res) => {
 		  res.send({ message: "Your application was registered successfully! Good Luck " });
 		});
 };
+
 

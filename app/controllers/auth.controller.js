@@ -153,7 +153,6 @@ exports.recruiter_signup = (req, res) => {
     country: req.body.country,
     password: bcrypt.hashSync(req.body.password, 8)
   });
-
   recruiter.save((err, recruiter) => {
     if (err) {
       res.status(500).send({ message: err });

@@ -3,7 +3,7 @@ const cheerio = require("cheerio");
 const db = require("../models/index");
 const jsdom = require("jsdom");
 const {TestModal,TestCreated} = db.test ;
-
+const Offer = db.offer ;
 dict = {
 7040905 : "python",
 7040708 : "angularJs",
@@ -153,6 +153,8 @@ exports.createTest = (req,res) => {
                     })
                 })
 }
+
+
 
 function getRandomIndexes(taille , nombre) {
     let indexes = []; 

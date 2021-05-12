@@ -16,6 +16,10 @@ module.exports = function(app) {
   
   app.post("/api/candidate/edit_cv", controller.edit_cv);
   
-  app.post("/api/application/submit",controller.submit_application); 
+  app.post("/api/candidate/get_applications", controller.get_applications);
+  
+  app.post("/api/candidate/get_profile", controller.get_profile);
+
+  app.post("/api/application/submit",controller.submit_application);
 
 };
